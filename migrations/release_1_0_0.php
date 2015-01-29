@@ -50,6 +50,27 @@ class release_1_0_0 extends \phpbb\db\migration\migration
 	{
 		return array(
 				array('custom', array(array($this, 'load_countries'))),
+				array(
+						'module.add',
+						array(
+								'acp',
+								'ACP_CAT_DOT_MODS',
+								'ACP_GEOMODERATE_TITLE'
+						)
+				),
+				array(
+						'module.add',
+						array(
+								'acp',
+								'ACP_GEOMODERATE_TITLE',
+								array(
+										'module_basename' => '\gothick\geomoderate\acp\geomoderate_module',
+										'modes' => array(
+												'settings'
+										)
+								)
+						)
+				)
 		);
 	}
 

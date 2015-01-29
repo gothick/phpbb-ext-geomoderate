@@ -1,0 +1,50 @@
+<!-- INCLUDE overall_header.html -->
+
+<a id="maincontent"></a>
+
+<h1>{L_GEOMODERATE_TITLE}</h1>
+
+<p>{L_GEOMODERATE_EXPLAIN}</p>
+
+<form id="geomoderate" method="post" action="{U_ACTION}">
+
+<table class="table1 zebra-table">
+<thead>
+<tr>
+	<th>{L_GEOMODERATE_COUNTRY_CODE}</th>
+	<th>{L_GEOMODERATE_COUNTRY}</th>
+	<th>{L_GEOMODERATE_MODERATE}</th>
+</tr>
+</thead>
+<tbody>
+<!-- BEGIN geomoderate -->
+	<tr>
+		<td style="vertical-align: top;">{geomoderate.COUNTRY_CODE}</td>
+		<td style="vertical-align: top;">{geomoderate.COUNTRY}</td>
+		<td>&nbsp;<input type="checkbox" class="radio" name="moderate[]" value="{geomoderate.COUNTRY_CODE}" <!-- IF geomoderate.MODERATE --> checked="checked"<!-- ENDIF --> />&nbsp;</td>
+	</tr>
+<!-- BEGINELSE -->
+	<tr>
+		<!-- This should never happen -->
+		<td colspan="6" style="text-align: center;">{L_GEOMODERATE_NO_COUNTRIES_LOADED}</td>
+	</tr>
+<!-- END geomoderate -->
+</tbody>
+</table>
+
+<hr />
+
+<!-- IF .pagination -->
+	<div class="pagination">
+		<!-- INCLUDE pagination.html -->
+	</div>
+<!-- ENDIF -->
+
+<fieldset class="quick">
+	<input class="button2" type="submit" name="submit" value="{L_SUBMIT}" />
+	{S_FORM_TOKEN}
+</fieldset>
+
+</form>
+
+<!-- INCLUDE overall_footer.html -->
