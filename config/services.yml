@@ -1,0 +1,15 @@
+services:
+  gothick.geomoderate.listener:
+    class: gothick\geomoderate\event\main_listener
+    arguments:
+      - @user
+      - @config
+      - @log
+      - @auth
+      - @service_container
+    tags:
+      - { name: event.listener }
+  gothick.geomoderate.geoip2.reader:
+    class: GeoIp2\Database\Reader
+    arguments:
+      - %core.root_path%ext/gothick/geomoderate/data/GeoLite2-Country.mmdb
