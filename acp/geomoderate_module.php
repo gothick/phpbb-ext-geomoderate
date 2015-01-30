@@ -59,7 +59,8 @@ class geomoderate_module
 			// a checked value that the user unchecked is still relevant) so we get back
 			// an array like 'A1' => 0, 'A2' => 1, 'AD' => 0, etc.
 			$moderate = $request->variable('moderate', array('' => 0));
-			if (sizeof($moderate)) {
+			if (sizeof($moderate))
+			{
 				$sql = 'UPDATE ' . $table_prefix . 'gothick_geomoderate SET moderate = 0 ' .
 						' WHERE ' . $db->sql_in_set('country_code', array_keys($moderate, 0));
 				$db->sql_query($sql);
@@ -84,7 +85,7 @@ class geomoderate_module
 		{
 			$template->assign_block_vars('geomoderate', array(
 				'COUNTRY_CODE' => $row['country_code'],
-				'COUNTRY' => $row['country_name'],
+				'COUNTRY_NAME' => $row['country_name'],
 				'MODERATE' => $row['moderate']
 			));
 		}

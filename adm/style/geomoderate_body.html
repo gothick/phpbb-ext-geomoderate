@@ -2,9 +2,9 @@
 
 <a id="maincontent"></a>
 
-<h1>{L_GEOMODERATE_TITLE}</h1>
+<h1>{L_ACP_GEOMODERATE_TITLE}</h1>
 
-<p>{L_GEOMODERATE_EXPLAIN}</p>
+<p>{L_ACP_GEOMODERATE_EXPLAIN}</p>
 
 <form id="geomoderate" method="post" action="{U_ACTION}">
 
@@ -17,16 +17,16 @@
 <table class="table1 zebra-table">
 <thead>
 <tr>
-	<th>{L_GEOMODERATE_COUNTRY_CODE}</th>
-	<th>{L_GEOMODERATE_COUNTRY}</th>
-	<th>{L_GEOMODERATE_MODERATE}</th>
+	<th>{L_ACP_GEOMODERATE_COUNTRY_CODE}</th>
+	<th>{L_ACP_GEOMODERATE_COUNTRY_NAME}</th>
+	<th>{L_ACP_GEOMODERATE_MODERATE}</th>
 </tr>
 </thead>
 <tbody>
 <!-- BEGIN geomoderate -->
 	<tr>
 		<td style="vertical-align: top;">{geomoderate.COUNTRY_CODE}</td>
-		<td style="vertical-align: top;">{geomoderate.COUNTRY}</td>
+		<td style="vertical-align: top;">{geomoderate.COUNTRY_NAME}</td>
 		<td>&nbsp;
 			<input type="hidden" name="moderate[{geomoderate.COUNTRY_CODE}]" value="0" />
 			<input type="checkbox" class="radio" name="moderate[{geomoderate.COUNTRY_CODE}]" value="1" <!-- IF geomoderate.MODERATE --> checked="checked"<!-- ENDIF --> />
@@ -36,7 +36,7 @@
 <!-- BEGINELSE -->
 	<tr>
 		<!-- This should never happen -->
-		<td colspan="6" style="text-align: center;">{L_GEOMODERATE_NO_COUNTRIES_LOADED}</td>
+		<td colspan="6" style="text-align: center;">{L_ACP_GEOMODERATE_NO_COUNTRIES_LOADED}</td>
 	</tr>
 <!-- END geomoderate -->
 </tbody>
