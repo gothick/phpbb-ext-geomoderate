@@ -7,7 +7,7 @@ services:
     arguments:
       - @user
       - @config
-      - @dbal.con
+      - @dbal.conn
       - @log
       - @auth
       - @service_container
