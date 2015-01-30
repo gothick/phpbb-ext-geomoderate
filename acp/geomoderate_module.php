@@ -25,7 +25,7 @@ class geomoderate_module
 	{
 		global $db, $user, $auth, $template, $cache, $request, $phpbb_log;
 		global $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
-		global $table_prefix;
+		global $table_prefix, $phpbb_container;
 
 		// Add our ACP language file.
 		$user->add_lang_ext('gothick/geomoderate', 'geomoderate_acp');
@@ -33,6 +33,18 @@ class geomoderate_module
 		$this->tpl_name = 'geomoderate_body';
 		$this->page_title = $user->lang('ACP_GEOMODERATE_TITLE');
 		add_form_key('gothick/geomoderate');
+
+		/* @var $pagination \phpbb\pagination */
+		$pagination = $phpbb_container->get('pagination');
+
+		// Pagination: where we are
+		$start	= request_var('start', 0);
+
+		// Pagination: entries to display
+		$per_page = request_var('countries_per_page', 100);
+
+		// Pagination: total
+		$countries_count = $db->get_row_count($table_prefix . 'gothick_geomoderate');
 
 		if ($request->is_set_post('submit') &&
 				$request->is_set_post('moderate'))
@@ -66,7 +78,7 @@ class geomoderate_module
 		}
 
 		$sql = 'SELECT * FROM ' . $table_prefix . 'gothick_geomoderate ORDER BY country_code';
-		$result = $db->sql_query($sql);
+		$result = $db->sql_query_limit($sql, $per_page, $start);
 
 		while ($row = $db->sql_fetchrow($result))
 		{
@@ -78,10 +90,13 @@ class geomoderate_module
 		}
 		$db->sql_freeresult($result);
 
+		$base_url = $this->u_action . "&amp;countries_per_page=$per_page";
+		$pagination->generate_template_pagination($base_url, 'pagination', 'start', $countries_count, $per_page, $start);
+
 		$template->assign_vars(
 				array(
-						'U_ACTION' => $this->u_action,
-						'GOTHICK_GEOMODERATE_WHATEVER' => 'whatever'
+						'U_ACTION' => $this->u_action . "&amp;countries_per_page=$per_page&amp;start=$start",
+						'COUNTRIES_PER_PAGE' => $per_page
 				));
 	}
 }
