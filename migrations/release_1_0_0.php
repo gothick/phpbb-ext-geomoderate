@@ -87,7 +87,9 @@ class release_1_0_0 extends \phpbb\db\migration\migration
 				$sql = 'INSERT INTO ' . $this->table_prefix . 'gothick_geomoderate' . ' ' .
 					$this->db->sql_build_array('INSERT', array(
 						'country_code'	=> (string) $data[0],
-						'country_name'	=> (string) $data[1]
+						// We don't store the actual country names from the file in the database,
+						// we store a code that can then be looked up in our language files.
+						'country_name'	=> 'ACP_GEOMODERATE_COUNTRY_' . (string) $data[0]
 					)
 				);
 				$this->sql_query($sql);

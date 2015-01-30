@@ -29,6 +29,8 @@ class geomoderate_module
 
 		// Add our ACP language file.
 		$user->add_lang_ext('gothick/geomoderate', 'geomoderate_acp');
+		// And all our country names
+		$user->add_lang_ext('gothick/geomoderate', 'geomoderate_acp_countries');
 
 		$this->tpl_name = 'geomoderate_body';
 		$this->page_title = $user->lang('ACP_GEOMODERATE_TITLE');
@@ -85,7 +87,7 @@ class geomoderate_module
 		{
 			$template->assign_block_vars('geomoderate', array(
 				'COUNTRY_CODE' => $row['country_code'],
-				'COUNTRY_NAME' => $row['country_name'],
+				'COUNTRY_NAME' => $user->lang($row['country_name']),
 				'MODERATE' => $row['moderate']
 			));
 		}
