@@ -34,11 +34,27 @@ class geomoderate_module
 		$this->page_title = $user->lang('ACP_GEOMODERATE_TITLE');
 		add_form_key('gothick/geomoderate');
 
-		if ($request->is_set_post('submit'))
+		if ($request->is_set_post('submit') &&
+				$request->is_set_post('moderate'))
 		{
 			if (! check_form_key('gothick/geomoderate'))
 			{
 				trigger_error('FORM_INVALID');
+			}
+
+			// Update our database table with the submitted values. Note that we use a hidden
+			// form field alongside the checkbox to make sure we get all the rows back (as
+			// a checked value that the user unchecked is still relevant) so we get back
+			// an array like 'A1' => 0, 'A2' => 1, 'AD' => 0, etc.
+			$moderate = $request->variable('moderate', array('' => 0));
+			if (sizeof($moderate)) {
+				$sql = 'UPDATE ' . $table_prefix . 'gothick_geomoderate SET moderate = 0 ' .
+						' WHERE ' . $db->sql_in_set('country_code', array_keys($moderate, 0));
+				$db->sql_query($sql);
+
+				$sql = 'UPDATE ' . $table_prefix . 'gothick_geomoderate SET moderate = 1 ' .
+						' WHERE ' . $db->sql_in_set('country_code', array_keys($moderate, 1));
+				$db->sql_query($sql);
 			}
 
 			$phpbb_log->add('admin', $user->data['user_id'], $user->ip,

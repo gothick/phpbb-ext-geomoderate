@@ -21,7 +21,11 @@
 	<tr>
 		<td style="vertical-align: top;">{geomoderate.COUNTRY_CODE}</td>
 		<td style="vertical-align: top;">{geomoderate.COUNTRY}</td>
-		<td>&nbsp;<input type="checkbox" class="radio" name="moderate[]" value="{geomoderate.COUNTRY_CODE}" <!-- IF geomoderate.MODERATE --> checked="checked"<!-- ENDIF --> />&nbsp;</td>
+		<td>&nbsp;
+			<input type="hidden" name="moderate[{geomoderate.COUNTRY_CODE}]" value="0" />
+			<input type="checkbox" class="radio" name="moderate[{geomoderate.COUNTRY_CODE}]" value="1" <!-- IF geomoderate.MODERATE --> checked="checked"<!-- ENDIF --> />
+			&nbsp;
+		</td>
 	</tr>
 <!-- BEGINELSE -->
 	<tr>
