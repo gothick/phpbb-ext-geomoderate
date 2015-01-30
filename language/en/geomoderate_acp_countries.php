@@ -16,6 +16,7 @@ if (empty($lang) || ! is_array($lang))
 	$lang = array();
 }
 
+// Source: http://dev.maxmind.com/geoip/legacy/codes/iso3166/
 $lang = array_merge($lang,
 		array(
 				'ACP_GEOMODERATE_COUNTRY_A1' => 'Anonymous Proxy',
