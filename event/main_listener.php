@@ -35,6 +35,9 @@ class main_listener implements EventSubscriberInterface
 	/* @var \phpbb\config\config */
 	protected $config;
 
+	/* @var \phpbb\db\driver\driver_interface */
+	protected $db;
+
 	/* @var \phpbb\log\log_interface */
 	protected $log;
 
@@ -43,6 +46,9 @@ class main_listener implements EventSubscriberInterface
 
 	/* @var \Symfony\Component\DependencyInjection\ContainerInterface */
 	protected $phpbb_container;
+
+	/* @var string */
+	protected $geomoderate_table;
 
 	/**
 	 * Constructor
@@ -53,23 +59,29 @@ class main_listener implements EventSubscriberInterface
 	 *
 	 * @param \phpbb\user $user
 	 * @param \phpbb\config\config $config
+	 * @param \phpbb\db\driver\driver_interface $db
 	 * @param \phpbb\log\log_interface $log
 	 * @param \phpbb\auth\auth $auth
 	 * @param \Symfony\Component\DependencyInjection\ContainerInterface $phpbb_container
+	 * @param string $geomoderate_table
 	 */
 	public function __construct (
 			\phpbb\user $user,
 			\phpbb\config\config $config,
+			\phpbb\db\driver\driver_interface $db,
 			\phpbb\log\log_interface $log,
 			\phpbb\auth\auth $auth,
-			\Symfony\Component\DependencyInjection\ContainerInterface $phpbb_container
+			\Symfony\Component\DependencyInjection\ContainerInterface $phpbb_container,
+			$geomoderate_table
 		)
 	{
 		$this->user = $user;
 		$this->config = $config;
+		$this->db = $db;
 		$this->log = $log;
 		$this->auth = $auth;
 		$this->phpbb_container = $phpbb_container;
+		$this->geomoderate_table = $geomoderate_table;
 	}
 
 	/**
@@ -92,13 +104,9 @@ class main_listener implements EventSubscriberInterface
 		if (! ($this->auth->acl_getf_global('m_') ||
 				$this->auth->acl_getf_global('a_')))
 		{
-			// Load GeoIP database
-			// Look up $user->ip
-			// Check list of countries
-			// Approve or disapprove.
 			$data = $event['data'];
 
-			$moderate = false;
+			$should_moderate = false;
 			$country_code = false;
 			try
 			{
@@ -109,6 +117,11 @@ class main_listener implements EventSubscriberInterface
 				);
 				$record = $reader->country($this->user->ip);
 				$country_code = $record->country->isoCode;
+
+				$sql = 'SELECT COUNT(*) AS moderate FROM ' . $this->geomoderate_table . ' WHERE country_code = ' . $this->db->sql_escape($country_code);
+				$result = $this->db->sql_query($sql); //TODO: Is getting this result and throwing it away really the right way? Copied from core, but tastes odd...
+				$should_moderate = (bool) $this->db->sql_fetchfield('moderate');
+
 			} catch (\Exception $e)
 			{
 				// If anything went wrong, we just log the error in case
@@ -122,11 +135,9 @@ class main_listener implements EventSubscriberInterface
 						));
 			}
 
-			// TODO: Check configured list of $country_codes
-			// http://dev.maxmind.com/geoip/legacy/codes/iso3166/
-			$is_spam = false;
 
-			if ($is_spam)
+
+			if ($should_moderate)
 			{
 				// Whatever the post status was before, this will override it
 				// and mark it as unapproved.

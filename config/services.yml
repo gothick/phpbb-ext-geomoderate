@@ -1,12 +1,17 @@
+imports:
+  - { resource: tables.yml }
+
 services:
   gothick.geomoderate.listener:
     class: gothick\geomoderate\event\main_listener
     arguments:
       - @user
       - @config
+      - @dbal.con
       - @log
       - @auth
       - @service_container
+      - %gothick.geomoderate.tables.geomoderate%
     tags:
       - { name: event.listener }
   gothick.geomoderate.geoip2.reader:

@@ -1,0 +1,2 @@
+parameters:
+    gothick.geomoderate.tables.geomoderate: %core.table_prefix%gothick_geomoderate
