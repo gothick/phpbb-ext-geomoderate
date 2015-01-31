@@ -119,12 +119,20 @@ class main_listener implements EventSubscriberInterface
 			{
 				/* @var $reader \GeoIp2\Database\Reader */
 				$reader = $this->phpbb_container->get('gothick.geomoderate.geoip2.reader');
-				$record = $reader->country($this->user->ip);
-				$country_code = $record->country->isoCode;
+				if (isset($reader))
+				{
+					$record = $reader->country($this->user->ip);
+					$country_code = $record->country->isoCode;
 
-				$sql = 'SELECT COUNT(*) AS moderate FROM ' . $this->geomoderate_table . ' WHERE country_code = ' . $this->db->sql_escape($country_code);
-				$result = $this->db->sql_query($sql);
-				$should_moderate = (bool) $this->db->sql_fetchfield('moderate');
+					$escaped_code = $this->db->sql_escape($country_code);
+					$sql = "SELECT COUNT(*) AS moderate FROM {$this->geomoderate_table} WHERE country_code = '{$escaped_code}'";
+					$result = $this->db->sql_query($sql);
+					$should_moderate = (bool) $this->db->sql_fetchfield('moderate');
+				}
+				else
+				{
+					//TODO: Log error
+				}
 
 			} catch (\Exception $e)
 			{
@@ -150,17 +158,19 @@ class main_listener implements EventSubscriberInterface
 				if ($event['mode'] == 'post' || ($event['mode'] == 'edit' &&
 						$data['topic_first_post_id'] == $data['post_id']))
 				{
-					$log_message = 'LOG_TOPIC_DISAPPROVED';
+					$log_message = 'GEOMODERATE_LOG_TOPIC_DISAPPROVED';
 				}
 				else
 				{
-					$log_message = 'LOG_POST_DISAPPROVED';
+					$log_message = 'GEOMODERATE_LOG_POST_DISAPPROVED';
 				}
 
-				// We need the ACP langauge pack for the moderation message, as it's
-				// destined for the ACP log page.
+				// We need the ACP langauge pack for the moderation message.
+				// TODO: This should really be logged in the board's default
+				// (admin) language, I think, as it'll be read on the moderation
+				// page by the administrator, not by the user who's been
+				// moderated. Won't hurt on most boards, though...
 				$this->user->add_lang_ext('gothick/geomoderate', 'info_acp_geomoderate');
-
 				$this->log->add('mod',
 						$this->user->data['user_id'],
 						$this->user->data['session_ip'],
@@ -168,7 +178,7 @@ class main_listener implements EventSubscriberInterface
 						false,
 						array(
 								$data['topic_title'],
-								$this->user->lang('GEOMODERATE_DISAPPROVED'),
+								$country_code,
 								$this->user->data['username']
 						));
 			}
