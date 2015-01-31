@@ -110,7 +110,11 @@ class main_listener implements EventSubscriberInterface
 			$data = $event['data'];
 
 			$should_moderate = false;
-			$country_code = false;
+			$country_code = '';
+
+			// It's important never to lose anyone's post if anything goes wrong.
+			// We wrap anything that might fail in a try/catch block and just let
+			// the post through if anything goes wrong.
 			try
 			{
 				/* @var $reader \GeoIp2\Database\Reader */
@@ -119,7 +123,7 @@ class main_listener implements EventSubscriberInterface
 				$country_code = $record->country->isoCode;
 
 				$sql = 'SELECT COUNT(*) AS moderate FROM ' . $this->geomoderate_table . ' WHERE country_code = ' . $this->db->sql_escape($country_code);
-				$result = $this->db->sql_query($sql); //TODO: Is getting this result and throwing it away really the right way? Copied from core, but tastes odd...
+				$result = $this->db->sql_query($sql);
 				$should_moderate = (bool) $this->db->sql_fetchfield('moderate');
 
 			} catch (\Exception $e)
