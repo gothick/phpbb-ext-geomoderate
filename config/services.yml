@@ -1,6 +1,6 @@
 imports:
   - { resource: tables.yml }
-
+  - { resource: paths.yml }
 services:
   gothick.geomoderate.listener:
     class: gothick\geomoderate\event\main_listener

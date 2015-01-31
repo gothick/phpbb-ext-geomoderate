@@ -32,6 +32,8 @@ class geomoderate_module
 		// And all our country names
 		$user->add_lang_ext('gothick/geomoderate', 'geomoderate_acp_countries');
 
+		$geomoderate_table = $phpbb_container->getParameter('gothick.geomoderate.tables.geomoderate');
+
 		$this->tpl_name = 'geomoderate_body';
 		$this->page_title = $user->lang('ACP_GEOMODERATE_TITLE');
 		add_form_key('gothick/geomoderate');
@@ -46,7 +48,7 @@ class geomoderate_module
 		$per_page = request_var('countries_per_page', 100);
 
 		// Pagination: total
-		$countries_count = $db->get_row_count($table_prefix . 'gothick_geomoderate');
+		$countries_count = $db->get_row_count($geomoderate_table);
 
 		if ($request->is_set_post('submit') &&
 				$request->is_set_post('moderate'))
@@ -63,11 +65,11 @@ class geomoderate_module
 			$moderate = $request->variable('moderate', array('' => 0));
 			if (sizeof($moderate))
 			{
-				$sql = 'UPDATE ' . $table_prefix . 'gothick_geomoderate SET moderate = 0 ' .
+				$sql = 'UPDATE ' . $geomoderate_table . ' SET moderate = 0 ' .
 						' WHERE ' . $db->sql_in_set('country_code', array_keys($moderate, 0));
 				$db->sql_query($sql);
 
-				$sql = 'UPDATE ' . $table_prefix . 'gothick_geomoderate SET moderate = 1 ' .
+				$sql = 'UPDATE ' . $geomoderate_table . ' SET moderate = 1 ' .
 						' WHERE ' . $db->sql_in_set('country_code', array_keys($moderate, 1));
 				$db->sql_query($sql);
 			}
@@ -80,7 +82,7 @@ class geomoderate_module
 							adm_back_link($this->u_action));
 		}
 
-		$sql = 'SELECT * FROM ' . $table_prefix . 'gothick_geomoderate ORDER BY country_code';
+		$sql = 'SELECT * FROM ' . $geomoderate_table . ' ORDER BY country_code';
 		$result = $db->sql_query_limit($sql, $per_page, $start);
 
 		while ($row = $db->sql_fetchrow($result))
