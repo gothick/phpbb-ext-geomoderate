@@ -93,7 +93,7 @@ class admin_controller
 	*/
 	public function display_settings()
 	{
-		add_form_key('gothick/gemoderate');
+		add_form_key('gothick/geomoderate');
 
 		if ($this->request->is_set_post('submit'))
 		{
@@ -164,7 +164,7 @@ class admin_controller
 			$this->db->sql_query($sql);
 
 			$sql = 'UPDATE ' . $this->geomoderate_table . ' SET moderate = 1 ' .
-					' WHERE ' . $this->$db->sql_in_set('country_code', array_keys($moderate, 1));
+					' WHERE ' . $this->db->sql_in_set('country_code', array_keys($moderate, 1));
 			$this->db->sql_query($sql);
 
 		}
