@@ -1,5 +1,8 @@
 <?php
 /**
+ * Intercept new posts and check the IP address of the poster in the geographical
+ * database. Push them to moderation queue if they're from countries chosen in
+ * the GeoModerate settings.
  *
  * @package phpBB Extension - GeoModerate
  * @copyright (c) 2015 Matt Gibson gothick@gothick.org.uk
@@ -111,10 +114,7 @@ class main_listener implements EventSubscriberInterface
 			try
 			{
 				/* @var $reader \GeoIp2\Database\Reader */
-				$reader = $this->phpbb_container->get(
-					'gothick.geomoderate.geoip2.reader',
-					ContainerInterface::NULL_ON_INVALID_REFERENCE
-				);
+				$reader = $this->phpbb_container->get('gothick.geomoderate.geoip2.reader');
 				$record = $reader->country($this->user->ip);
 				$country_code = $record->country->isoCode;
 
@@ -134,8 +134,6 @@ class main_listener implements EventSubscriberInterface
 								$e->getMessage()
 						));
 			}
-
-
 
 			if ($should_moderate)
 			{
