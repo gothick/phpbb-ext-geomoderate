@@ -1,36 +1,36 @@
 imports:
-  - { resource: tables.yml }
-  - { resource: paths.yml }
+    - { resource: tables.yml }
+    - { resource: paths.yml }
 services:
 
-  gothick.geomoderate.listener:
-    class: gothick\geomoderate\event\main_listener
-    arguments:
-      - @user
-      - @config
-      - @dbal.conn
-      - @log
-      - @auth
-      - @service_container
-      - %gothick.geomoderate.tables.geomoderate%
-    tags:
-      - { name: event.listener }
+    gothick.geomoderate.listener:
+        class: gothick\geomoderate\event\main_listener
+        arguments:
+            - @user
+            - @config
+            - @dbal.conn
+            - @log
+            - @auth
+            - @service_container
+            - %gothick.geomoderate.tables.geomoderate%
+        tags:
+            - { name: event.listener }
 
-  gothick.geomoderate.admin.controller:
-    class: gothick\geomoderate\controller\admin_controller
-    arguments:
-      - @dbal.conn
-      - @request
-      - @template
-      - @user
-      - @log
-      - @pagination
-      - @service_container
-      - %core.root_path%
-      - %core.php_ext%
-      - %gothick.geomoderate.tables.geomoderate%
-      
-  gothick.geomoderate.geoip2.reader:
-    class: GeoIp2\Database\Reader
-    arguments:
-      - %gothick.geomoderate.paths.geolite_db%
+    gothick.geomoderate.admin.controller:
+        class: gothick\geomoderate\controller\admin_controller
+        arguments:
+            - @dbal.conn
+            - @request
+            - @template
+            - @user
+            - @log
+            - @pagination
+            - @service_container
+            - %core.root_path%
+            - %core.php_ext%
+            - %gothick.geomoderate.tables.geomoderate%
+
+    gothick.geomoderate.geoip2.reader:
+        class: GeoIp2\Database\Reader
+        arguments:
+            - %gothick.geomoderate.paths.geolite_db%
