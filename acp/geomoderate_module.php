@@ -1,5 +1,6 @@
 <?php
 /**
+ * GeoModerate ACP Module
  *
  * @package phpBB Extension - GeoModerate
  * @copyright (c) 2015 Matt Gibson Creative Ltd.
@@ -23,85 +24,19 @@ class geomoderate_module
 
 	function main ($id, $mode)
 	{
-		global $db, $user, $auth, $template, $cache, $request, $phpbb_log;
-		global $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
-		global $table_prefix, $phpbb_container;
+		global $phpbb_container, $user;
 
 		// Add our ACP language file.
 		$user->add_lang_ext('gothick/geomoderate', 'geomoderate_acp');
 		// And all our country names
 		$user->add_lang_ext('gothick/geomoderate', 'geomoderate_acp_countries');
 
-		$geomoderate_table = $phpbb_container->getParameter('gothick.geomoderate.tables.geomoderate');
+		/* @var $admin_controller \gothick\geomoderate\controller\admin_controller */
+		$admin_controller = $phpbb_container->get('gothick.geomoderate.admin.controller');
+		$admin_controller->set_action($this->u_action);
 
 		$this->tpl_name = 'geomoderate_body';
 		$this->page_title = $user->lang('ACP_GEOMODERATE_TITLE');
-		add_form_key('gothick/geomoderate');
-
-		/* @var $pagination \phpbb\pagination */
-		$pagination = $phpbb_container->get('pagination');
-
-		// Pagination: where we are
-		$start	= request_var('start', 0);
-
-		// Pagination: entries to display
-		$per_page = request_var('countries_per_page', 100);
-
-		// Pagination: total
-		$countries_count = $db->get_row_count($geomoderate_table);
-
-		if ($request->is_set_post('submit') &&
-				$request->is_set_post('moderate'))
-		{
-			if (! check_form_key('gothick/geomoderate'))
-			{
-				trigger_error('FORM_INVALID');
-			}
-
-			// Update our database table with the submitted values. Note that we use a hidden
-			// form field alongside the checkbox to make sure we get all the rows back (as
-			// a checked value that the user unchecked is still relevant) so we get back
-			// an array like 'A1' => 0, 'A2' => 1, 'AD' => 0, etc.
-			$moderate = $request->variable('moderate', array('' => 0));
-			if (sizeof($moderate))
-			{
-				$sql = 'UPDATE ' . $geomoderate_table . ' SET moderate = 0 ' .
-						' WHERE ' . $db->sql_in_set('country_code', array_keys($moderate, 0));
-				$db->sql_query($sql);
-
-				$sql = 'UPDATE ' . $geomoderate_table . ' SET moderate = 1 ' .
-						' WHERE ' . $db->sql_in_set('country_code', array_keys($moderate, 1));
-				$db->sql_query($sql);
-			}
-
-			$phpbb_log->add('admin', $user->data['user_id'], $user->ip,
-					'GEOMODERATE_LOG_SETTING_CHANGED');
-
-			trigger_error(
-					$user->lang('ACP_GEOMODERATE_SETTING_SAVED') .
-							adm_back_link($this->u_action));
-		}
-
-		$sql = 'SELECT * FROM ' . $geomoderate_table . ' ORDER BY country_code';
-		$result = $db->sql_query_limit($sql, $per_page, $start);
-
-		while ($row = $db->sql_fetchrow($result))
-		{
-			$template->assign_block_vars('geomoderate', array(
-				'COUNTRY_CODE' => $row['country_code'],
-				'COUNTRY_NAME' => $user->lang($row['country_name']),
-				'MODERATE' => $row['moderate']
-			));
-		}
-		$db->sql_freeresult($result);
-
-		$base_url = $this->u_action . "&amp;countries_per_page=$per_page";
-		$pagination->generate_template_pagination($base_url, 'pagination', 'start', $countries_count, $per_page, $start);
-
-		$template->assign_vars(
-				array(
-						'U_ACTION' => $this->u_action . "&amp;countries_per_page=$per_page&amp;start=$start",
-						'COUNTRIES_PER_PAGE' => $per_page
-				));
+		$admin_controller->display_settings();
 	}
 }
