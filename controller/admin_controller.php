@@ -106,7 +106,7 @@ class admin_controller
 
 			$this->save_settings();
 
-			$this->log->add('admin', $user->data['user_id'], $user->ip,
+			$this->log->add('admin', $this->user->data['user_id'], $this->user->ip,
 					'GEOMODERATE_LOG_SETTING_CHANGED');
 
 			trigger_error(
@@ -122,15 +122,16 @@ class admin_controller
 		$countries_count = $this->db->get_row_count($this->geomoderate_table);
 
 		// Get our page of countries and current moderation settings
-		$sql = 'SELECT * FROM ' . $this->geomoderate_table . ' ORDER BY country_code';
+		$sql = 'SELECT country_code, moderate FROM ' . $this->geomoderate_table . ' ORDER BY country_code';
 		$result = $this->db->sql_query_limit($sql, $per_page, $start);
 
 		// Block assign template variable for our checkboxy list
 		while ($row = $this->db->sql_fetchrow($result))
 		{
+			$country_code = $row['country_code'];
 			$this->template->assign_block_vars('geomoderate', array(
-					'COUNTRY_CODE' => $row['country_code'],
-					'COUNTRY_NAME' => $this->user->lang($row['country_name']),
+					'COUNTRY_CODE' => $country_code,
+					'COUNTRY_NAME' => $this->user->lang(array('ACP_GEOMODERATE_COUNTRIES', $country_code)),
 					'MODERATE' => $row['moderate']
 			));
 		}

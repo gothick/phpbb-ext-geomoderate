@@ -24,7 +24,6 @@ class release_1_0_0 extends \phpbb\db\migration\migration
 						$this->table_prefix . 'gothick_geomoderate'	=> array(
 								'COLUMNS'		=> array(
 										'country_code'			=> array('CHAR:2', ''),
-										'country_name'			=> array('VCHAR:255', ''),
 										'moderate'				=> array('BOOL', 0)
 								),
 								'PRIMARY_KEY'	=> 'country_code',
@@ -75,7 +74,9 @@ class release_1_0_0 extends \phpbb\db\migration\migration
 	}
 
 	/**
-	 * Load our list of countries and codes from the MaxMind CSV file.
+	 * Load our list of country codes from the MaxMind CSV file. We only need the codes;
+	 * names are looked up in our langauge files, which are keyed to the same ISO 3166
+	 * country codes.
 	 */
 	public function load_countries()
 	{
@@ -87,9 +88,6 @@ class release_1_0_0 extends \phpbb\db\migration\migration
 				$sql = 'INSERT INTO ' . $this->table_prefix . 'gothick_geomoderate' . ' ' .
 					$this->db->sql_build_array('INSERT', array(
 						'country_code'	=> (string) $data[0],
-						// We don't store the actual country names from the file in the database,
-						// we store a code that can then be looked up in our language files.
-						'country_name'	=> 'ACP_GEOMODERATE_COUNTRY_' . (string) $data[0]
 					)
 				);
 				$this->sql_query($sql);
