@@ -50,6 +50,8 @@ class admin_controller
 	/** @var string GeoModerate table */
 	protected $geomoderate_table;
 
+	const FORM_KEY = 'gothick/geomoderate';
+
 	/**
 	* Constructor
 	*
@@ -93,11 +95,11 @@ class admin_controller
 	*/
 	public function display_settings()
 	{
-		add_form_key('gothick/geomoderate');
+		add_form_key(self::FORM_KEY);
 
 		if ($this->request->is_set_post('submit'))
 		{
-			if (!check_form_key('gothick/geomoderate'))
+			if (!check_form_key(self::FORM_KEY))
 			{
 				trigger_error('FORM_INVALID');
 			}
