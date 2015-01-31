@@ -17,4 +17,4 @@ services:
   gothick.geomoderate.geoip2.reader:
     class: GeoIp2\Database\Reader
     arguments:
-      - %core.root_path%ext/gothick/geomoderate/data/GeoLite2-Country.mmdb
+      - %gothick.geomoderate.paths.geolite_db%

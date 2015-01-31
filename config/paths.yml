@@ -1,5 +1,5 @@
 parameters:
-    gothick.geomoderate.ext_path: %core.root_path%ext/gothick/geomoderate/
-    gothick.geomoderate.data_path: %gothick.geomoderate.ext_path%data/
-    gothick.geomoderate.countries_csv: %gothick.geomoderate.data_path%countries.csv
-    gothick.geomoderate.geolite_db: %gothick.geomoderate.data_path%GeoLite2-Country.mmdb
+    gothick.geomoderate.paths.ext_path: %core.root_path%ext/gothick/geomoderate/
+    gothick.geomoderate.paths.data_path: %gothick.geomoderate.paths.ext_path%data/
+    gothick.geomoderate.paths.countries_csv: %gothick.geomoderate.paths.data_path%countries.csv
+    gothick.geomoderate.paths.geolite_db: %gothick.geomoderate.paths.data_path%GeoLite2-Country.mmdb
