@@ -159,7 +159,11 @@ class country_rules_test extends \phpbb_session_test_case
 		);
 		$country_rules->bulk_update($moderate_array);
 		$expected = $this->createXMLDataSet(dirname(__FILE__) . '/fixtures/country_rules_after_update.xml')->getTable($this->geomoderate_table);
-		$query_table = $this->getConnection()->createQueryTable($this->geomoderate_table, 'SELECT * FROM ' . $this->geomoderate_table);
+		// NB: If you don't order by the same thing in the query as in the fixture, this will fail
+		// on Postgres, as assertTablesEqual (in my opionion, rather crazily) relies on the ordering,
+		// and on Postgres the records seem to come back ordered by the "moderate" column if there's
+		// no ORDER BY... That only took me two hours and three virtual boxes to figure out.
+		$query_table = $this->getConnection()->createQueryTable($this->geomoderate_table, 'SELECT * FROM ' . $this->geomoderate_table . ' ORDER BY country_code');
 		$this->assertTablesEqual($expected, $query_table);
 	}
 }
