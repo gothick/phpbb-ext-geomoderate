@@ -69,7 +69,8 @@ class country_rules
 
 	/**
 	 * Pass an array mapping country codes to 0 (don't moderate) or 1 (moderate). The
-	 * rules will be bulk-updated accordingly.
+	 * rules will be bulk-updated accordingly. This is a handy interface to use if
+	 * you're processing a batch of checkboxes from a form submission, say... ;)
 	 *
 	 * @param array $moderate_array
 	 */
