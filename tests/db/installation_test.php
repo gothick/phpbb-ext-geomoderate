@@ -42,7 +42,6 @@ class simple_test extends \phpbb_database_test_case
 	public function getDataSet()
 	{
 		return $this->createXMLDataSet(dirname(__FILE__) . '/fixtures/country_rules.xml');
-		//return new \PHPUnit_Extensions_Database_DataSet_DefaultDataSet();
 	}
 
 	/**
