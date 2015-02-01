@@ -9,7 +9,7 @@
 
 namespace gothick\geomoderate\tests\db;
 
-class simple_test extends \phpbb_database_test_case
+class installation_test extends \phpbb_database_test_case
 {
 	/**
 	 * @var \phpbb\db\driver\driver_interface
@@ -49,7 +49,6 @@ class simple_test extends \phpbb_database_test_case
 	 */
 	public function test_table_creation()
 	{
-		global $table_prefix;
 		$this->assertTrue($this->db_tools->sql_table_exists($this->geomoderate_table), 'geomoderate table exists.');
 		$this->assertTrue($this->db_tools->sql_column_exists($this->geomoderate_table, 'country_code'), 'Column "country code" exists.');
 		$this->assertTrue($this->db_tools->sql_column_exists($this->geomoderate_table, 'moderate'), 'Column "moderate" exists.');
