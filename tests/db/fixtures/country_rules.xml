@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<dataset>
+	<table name="phpbb_gothick_geomoderate">
+		<column>country_code</column>
+		<column>moderate</column>
+		<!-- Our tests will see if we "A"llow from these three countries beginning with "A"... -->
+		<row>
+			<value>AD</value>
+			<value>0</value>
+		</row>
+		<row>
+			<value>AF</value>
+			<value>0</value>
+		</row>
+		<row>
+			<value>AG</value>
+			<value>0</value>
+		</row>
+		<!-- ...and "M"oderate from these three countries beginning with "M" -->
+		<row>
+			<value>MW</value>
+			<value>1</value>
+		</row>
+				<row>
+			<value>MX</value>
+			<value>1</value>
+		</row>
+		<row>
+			<value>MY</value>
+			<value>1</value>
+		</row>
+	</table>
+</dataset>
