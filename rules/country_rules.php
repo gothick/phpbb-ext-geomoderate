@@ -104,5 +104,3 @@ class country_rules
 		return (bool) $this->db->sql_fetchfield('moderate');
 	}
 }
-
-

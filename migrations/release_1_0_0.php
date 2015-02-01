@@ -81,9 +81,9 @@ class release_1_0_0 extends \phpbb\db\migration\migration
 	public function load_countries()
 	{
 		$countries_file = $this->phpbb_root_path . 'ext/gothick/geomoderate/data/countries.csv';
-		if (($handle = fopen("$countries_file", "r")) !== FALSE)
+		if (($handle = fopen("$countries_file", "r")) !== false)
 		{
-			while (($data = fgetcsv($handle, 1000, ",")) !== FALSE)
+			while (($data = fgetcsv($handle, 1000, ",")) !== false)
 			{
 				$sql = 'INSERT INTO ' . $this->table_prefix . 'gothick_geomoderate' . ' ' .
 					$this->db->sql_build_array('INSERT', array(

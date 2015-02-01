@@ -41,7 +41,7 @@ class main_listener implements EventSubscriberInterface
 		/* @var \phpbb\auth\auth */
 	protected $auth;
 
-	/* @var \Symfony\Component\DependencyInjection\ContainerInterface */
+	/* @var ContainerInterface */
 	protected $phpbb_container;
 
 	/* @var \gothick\geomoderate\rules\country_rules */
@@ -57,14 +57,14 @@ class main_listener implements EventSubscriberInterface
 	 * @param \phpbb\user $user
 	 * @param \phpbb\log\log_interface $log
 	 * @param \phpbb\auth\auth $auth
-	 * @param \Symfony\Component\DependencyInjection\ContainerInterface $phpbb_container
+	 * @param ContainerInterface $phpbb_container
 	 * @param \gothick\geomoderate\rules\country_rules $country_rules
 	 */
 	public function __construct (
 			\phpbb\user $user,
 			\phpbb\log\log_interface $log,
 			\phpbb\auth\auth $auth,
-			\Symfony\Component\DependencyInjection\ContainerInterface $phpbb_container,
+			ContainerInterface $phpbb_container,
 			\gothick\geomoderate\rules\country_rules $country_rules
 		)
 	{
