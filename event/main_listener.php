@@ -35,12 +35,6 @@ class main_listener implements EventSubscriberInterface
 	/* @var \phpbb\user */
 	protected $user;
 
-	/* @var \phpbb\config\config */
-	protected $config;
-
-	/* @var \phpbb\db\driver\driver_interface */
-	protected $db;
-
 	/* @var \phpbb\log\log_interface */
 	protected $log;
 
@@ -50,8 +44,8 @@ class main_listener implements EventSubscriberInterface
 	/* @var \Symfony\Component\DependencyInjection\ContainerInterface */
 	protected $phpbb_container;
 
-	/* @var string */
-	protected $geomoderate_table;
+	/* @var \gothick\geomoderate\rules\country_rules */
+	protected $country_rules;
 
 	/**
 	 * Constructor
@@ -61,30 +55,24 @@ class main_listener implements EventSubscriberInterface
 	 * to post a message.
 	 *
 	 * @param \phpbb\user $user
-	 * @param \phpbb\config\config $config
-	 * @param \phpbb\db\driver\driver_interface $db
 	 * @param \phpbb\log\log_interface $log
 	 * @param \phpbb\auth\auth $auth
 	 * @param \Symfony\Component\DependencyInjection\ContainerInterface $phpbb_container
-	 * @param string $geomoderate_table
+	 * @param \gothick\geomoderate\rules\country_rules $country_rules
 	 */
 	public function __construct (
 			\phpbb\user $user,
-			\phpbb\config\config $config,
-			\phpbb\db\driver\driver_interface $db,
 			\phpbb\log\log_interface $log,
 			\phpbb\auth\auth $auth,
 			\Symfony\Component\DependencyInjection\ContainerInterface $phpbb_container,
-			$geomoderate_table
+			\gothick\geomoderate\rules\country_rules $country_rules
 		)
 	{
 		$this->user = $user;
-		$this->config = $config;
-		$this->db = $db;
 		$this->log = $log;
 		$this->auth = $auth;
 		$this->phpbb_container = $phpbb_container;
-		$this->geomoderate_table = $geomoderate_table;
+		$this->country_rules = $country_rules;
 	}
 
 	/**
@@ -112,34 +100,24 @@ class main_listener implements EventSubscriberInterface
 			$should_moderate = false;
 			$country_code = '';
 
-			// It's important never to lose anyone's post if anything goes wrong.
+			// We do our best not to lose anyone's post if anything goes wrong.
 			// We wrap anything that might fail in a try/catch block and just let
-			// the post through if anything goes wrong.
+			// the post through if there's an exception of any kind.
 			try
 			{
+				// Find the country code from the GeoIp2 database
 				/* @var $reader \GeoIp2\Database\Reader */
 				$reader = $this->phpbb_container->get('gothick.geomoderate.geoip2.reader');
-				if (isset($reader))
-				{
-					$record = $reader->country($this->user->ip);
-					$country_code = $record->country->isoCode;
+				$record = $reader->country($this->user->ip);
+				$country_code = $record->country->isoCode;
 
-					$sql_ary = array('country_code' => $country_code);
-
-					$sql = 'SELECT COUNT(*) AS moderate FROM ' . $this->geomoderate_table . ' WHERE ' .
-						$this->db->sql_build_array('SELECT', $sql_ary);
-					$result = $this->db->sql_query($sql);
-					$should_moderate = (bool) $this->db->sql_fetchfield('moderate');
-				}
-				else
-				{
-					//TODO: Log error
-				}
-
+				// Check it in the rules.
+				$should_moderate = $this->country_rules->should_moderate($country_code);
 			} catch (\Exception $e)
 			{
 				// If anything went wrong, we just log the error in case
-				// anyone wants to figure out why...
+				// anyone wants to figure out why. The most likely cause
+				// is an IP address the GeoIP couldn't look up, e.g. 127.0.0.1.
 				$this->log->add('critical',
 						$this->user->data['user_id'],
 						$this->user->data['session_ip'],
@@ -168,10 +146,6 @@ class main_listener implements EventSubscriberInterface
 				}
 
 				// We need the ACP langauge pack for the moderation message.
-				// TODO: This should really be logged in the board's default
-				// (admin) language, I think, as it'll be read on the moderation
-				// page by the administrator, not by the user who's been
-				// moderated. Won't hurt on most boards, though...
 				$this->user->add_lang_ext('gothick/geomoderate', 'info_acp_geomoderate');
 				$this->log->add('mod',
 						$this->user->data['user_id'],
