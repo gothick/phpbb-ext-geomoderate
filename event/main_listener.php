@@ -124,8 +124,10 @@ class main_listener implements EventSubscriberInterface
 					$record = $reader->country($this->user->ip);
 					$country_code = $record->country->isoCode;
 
-					$escaped_code = $this->db->sql_escape($country_code);
-					$sql = "SELECT COUNT(*) AS moderate FROM {$this->geomoderate_table} WHERE country_code = '{$escaped_code}'";
+					$sql_ary = array('country_code' => $country_code);
+
+					$sql = 'SELECT COUNT(*) AS moderate FROM ' . $this->geomoderate_table . ' WHERE ' .
+						$this->db->sql_build_array('SELECT', $sql_ary);
 					$result = $this->db->sql_query($sql);
 					$should_moderate = (bool) $this->db->sql_fetchfield('moderate');
 				}
