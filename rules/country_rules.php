@@ -97,7 +97,7 @@ class country_rules
 	 */
 	public function should_moderate($country_code)
 	{
-		$sql_ary = array('country_code' => $country_code);
+		$sql_ary = array('country_code' => $country_code, 'moderate' => 1);
 		$sql = 'SELECT COUNT(*) AS moderate FROM ' . $this->geomoderate_table . ' WHERE ' .
 				$this->db->sql_build_array('SELECT', $sql_ary);
 		$result = $this->db->sql_query($sql, 3600); // We clear the cache in our update methods.
