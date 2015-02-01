@@ -38,7 +38,7 @@ class main_listener implements EventSubscriberInterface
 	/* @var \phpbb\log\log_interface */
 	protected $log;
 
-		/* @var \phpbb\auth\auth */
+	/* @var \phpbb\auth\auth */
 	protected $auth;
 
 	/* @var ContainerInterface */
