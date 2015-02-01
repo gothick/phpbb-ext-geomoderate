@@ -78,11 +78,13 @@ class country_rules
 	{
 		if (sizeof($moderate_array))
 		{
-			$sql = 'UPDATE ' . $this->geomoderate_table . ' SET moderate = 0 ' .
+			$sql_ary = array('moderate' => false);
+			$sql = 'UPDATE ' . $this->geomoderate_table . ' SET ' . $this->db->sql_build_array('UPDATE', $sql_ary) .
 					' WHERE ' . $this->db->sql_in_set('country_code', array_keys($moderate_array, 0));
 			$this->db->sql_query($sql);
 
-			$sql = 'UPDATE ' . $this->geomoderate_table . ' SET moderate = 1 ' .
+			$sql_ary = array('moderate' => true);
+			$sql = 'UPDATE ' . $this->geomoderate_table . ' SET ' . $this->db->sql_build_array('UPDATE', $sql_ary) .
 					' WHERE ' . $this->db->sql_in_set('country_code', array_keys($moderate_array, 1));
 			$this->db->sql_query($sql);
 
