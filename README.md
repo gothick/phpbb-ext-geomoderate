@@ -1,5 +1,7 @@
 # phpbb-ext-geomoderate
 
+[![Build Status](https://travis-ci.org/gothick/phpbb-ext-geomoderate.svg?branch=master)](https://travis-ci.org/gothick/phpbb-ext-geomoderate)
+
 29 January 2015: This is in the very early stages of development! 
 Don't use me yet :D
 
