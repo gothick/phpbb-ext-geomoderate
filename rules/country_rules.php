@@ -92,7 +92,7 @@ class country_rules
 
 	/**
 	 * Should we moderate posts from a given country code?
-	 * @param unknown $country_code
+	 * @param string $country_code ISO country code
 	 * @return boolean
 	 */
 	public function should_moderate($country_code)
