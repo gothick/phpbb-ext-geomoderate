@@ -76,17 +76,26 @@ class country_rules
 	 */
 	public function bulk_update($moderate_array)
 	{
-		if (sizeof($moderate_array))
+		if (is_array($moderate_array))
 		{
-			$sql_ary = array('moderate' => false);
-			$sql = 'UPDATE ' . $this->geomoderate_table . ' SET ' . $this->db->sql_build_array('UPDATE', $sql_ary) .
-					' WHERE ' . $this->db->sql_in_set('country_code', array_keys($moderate_array, 0));
-			$this->db->sql_query($sql);
 
-			$sql_ary = array('moderate' => true);
-			$sql = 'UPDATE ' . $this->geomoderate_table . ' SET ' . $this->db->sql_build_array('UPDATE', $sql_ary) .
-					' WHERE ' . $this->db->sql_in_set('country_code', array_keys($moderate_array, 1));
-			$this->db->sql_query($sql);
+			$countries_to_unmoderate = array_keys($moderate_array, 0);
+			if (sizeof($countries_to_unmoderate) > 0)
+			{
+				$sql_ary = array('moderate' => false);
+				$sql = 'UPDATE ' . $this->geomoderate_table . ' SET ' . $this->db->sql_build_array('UPDATE', $sql_ary) .
+						' WHERE ' . $this->db->sql_in_set('country_code', $countries_to_unmoderate);
+				$this->db->sql_query($sql);
+			}
+
+			$countries_to_moderate = array_keys($moderate_array, 1);
+			if (sizeof($countries_to_moderate) > 0)
+			{
+				$sql_ary = array('moderate' => true);
+				$sql = 'UPDATE ' . $this->geomoderate_table . ' SET ' . $this->db->sql_build_array('UPDATE', $sql_ary) .
+						' WHERE ' . $this->db->sql_in_set('country_code', $countries_to_moderate);
+				$this->db->sql_query($sql);
+			}
 
 			$this->cache->destroy('sql', $this->geomoderate_table);
 		}
