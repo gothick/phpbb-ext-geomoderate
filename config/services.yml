@@ -26,7 +26,6 @@ services:
 
     gothick.geomoderate.geoip2.reader:
         class: GeoIp2\Database\Reader
-#        class: gothick\geomoderate\tests\mock\reader_always_united_kingdom
         arguments:
             - %gothick.geomoderate.paths.geolite_db%
 
