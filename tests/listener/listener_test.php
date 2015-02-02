@@ -59,6 +59,8 @@ class main_test extends \phpbb_test_case
 	}
 
 	/**
+	 * Basic test of event listener: does it mark things from certain countries
+	 * for moderation?
 	 * @dataProvider handle_data
 	 */
 	public function test_event_listener($username, $message, $ip, $should_be_moderated)
@@ -105,5 +107,116 @@ class main_test extends \phpbb_test_case
 			$this->assertFalse(isset($event['data']['force_approved_state']));
 		}
 	}
-	//TODO: Test if things are always allowed through from a moderator or admin.
+
+	/**
+	 * Do moderation events get logged correctly?
+	 */
+	public function test_event_listener_log_moderation()
+	{
+		$phpbb_container = new \phpbb_mock_container_builder();
+		$mock_reader = new \gothick\geomoderate\tests\mock\geoip2_reader_mock('');
+		$phpbb_container->set('gothick.geomoderate.geoip2.reader', $mock_reader);
+
+		$user = $this->getMockBuilder('\phpbb\user')
+				->disableOriginalConstructor()
+				->getMock();
+
+		// This IP address is known to our mock reader as Russian,
+		// and Russian posts are configured to be moderated in our
+		// mock rules. No exception should be thrown, and the post
+		// should be moderated.
+		$user->ip = '93.182.36.82';
+		$user->data = array(
+				'user_id' => '123',
+				'username' => 'Yuri',
+				'session_ip' => '93.182.36.82'
+		);
+
+		$log = $this->getMockBuilder('\phpbb\log\log')
+				->disableOriginalConstructor()
+				->setMethods(array('add'))
+				->getMock();
+
+		$log->expects($this->once())
+				->method('add')
+				->with(
+					$this->equalTo('mod'),
+					$this->equalTo(123),
+					$this->equalTo('93.182.36.82'),
+					$this->stringContains('DISAPPROVED'),
+					$this->equalTo(false),
+					$this->anything()
+			);
+
+		$listener = new \gothick\geomoderate\event\main_listener(
+				$user,
+				$log,
+				$this->getMock('\phpbb\auth\auth'),
+				$phpbb_container,
+				new \gothick\geomoderate\tests\mock\country_rules_mock()
+		);
+
+		$data = array('data' => array('message' => 'Test'));
+		$event = new \phpbb\event\data($data);
+
+		$listener->check_submitted_post($event);
+		// Message should be moderated
+		$this->assertTrue(isset($event['data']['force_approved_state']), "force_approved_state should be set for known moderation IP.");
+		$this->assertEquals($event['data']['force_approved_state'], ITEM_UNAPPROVED, "known moderation IP should be unapproved.");
+	}
+
+	/**
+	 * Do unexpected exceptions get logged quietly, with the post being
+	 * marked as approved?
+	 */
+	public function test_event_listener_log_exceptions()
+	{
+		$phpbb_container = new \phpbb_mock_container_builder();
+		$mock_reader = new \gothick\geomoderate\tests\mock\geoip2_reader_mock('');
+		$phpbb_container->set('gothick.geomoderate.geoip2.reader', $mock_reader);
+
+		$user = $this->getMockBuilder('\phpbb\user')
+		->disableOriginalConstructor()
+		->getMock();
+
+		// The GeoIp2 service can't handle 127.0.0.1, and throws an exception,
+		// as does our mock service.
+		$user->ip = '127.0.0.1';
+		$user->data = array(
+				'user_id' => '123',
+				'username' => 'Yuri',
+				'session_ip' => '127.0.0.1'
+		);
+
+		$log = $this->getMockBuilder('\phpbb\log\log')
+				->disableOriginalConstructor()
+				->setMethods(array('add'))
+				->getMock();
+
+		$log->expects($this->once())
+		->method('add')
+		->with(
+				$this->equalTo('critical'),
+				$this->equalTo(123),
+				$this->equalTo('127.0.0.1'),
+				$this->stringContains('LOOKUP_FAILED'),
+				$this->equalTo(false),
+				$this->anything()
+		);
+
+		$listener = new \gothick\geomoderate\event\main_listener(
+				$user,
+				$log,
+				$this->getMock('\phpbb\auth\auth'),
+				$phpbb_container,
+				new \gothick\geomoderate\tests\mock\country_rules_mock()
+		);
+
+		$data = array('data' => array('message' => 'Test'));
+		$event = new \phpbb\event\data($data);
+
+		$listener->check_submitted_post($event);
+		// Message should not be moderated
+		$this->assertFalse(isset($event['data']['force_approved_state']), 'Post from IP address that causes exception should be quietly approved.');
+	}
 }
