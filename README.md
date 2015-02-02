@@ -2,11 +2,14 @@
 
 [![Build Status](https://travis-ci.org/gothick/phpbb-ext-geomoderate.svg?branch=master)](https://travis-ci.org/gothick/phpbb-ext-geomoderate)
 
-29 January 2015: This is in the very early stages of development! 
-Don't use me yet :D
+**Note**: This is beta software. Don't install it on a production board. Currently it's compatible with phpBB 3.1.x ("Ascraeus"), and it seems to work for me, but your mileage very definitely may vary.
 
-A phpBB Extension that moderates all posts from certain countries, based
-on the Maxmind GeoLite2 Country database.
+A phpBB Extension that moderates all posts from certain countries, based on the Maxmind GeoLite2 Country database.
 
-This product includes GeoLite2 data created by MaxMind, available from
-[http://www.maxmind.com](http://www.maxmind.com).
+* Install in the normal way.
+* Configure under Extensions->GeoModerate Settings. Tick the box for any country of origin whose posts you'd like to go to the moderation queue.
+* Profit.
+
+Admins and moderators will bypass the check automatically. Any moderation action taken by the Extension will appear in the Moderation log.
+
+This product includes GeoLite2 data created by MaxMind, available from [http://www.maxmind.com](http://www.maxmind.com).
