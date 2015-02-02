@@ -218,6 +218,7 @@ class main_test extends \phpbb_test_case
 		$listener->check_submitted_post($event);
 		// Message should not be moderated
 		$this->assertFalse(isset($event['data']['force_approved_state']), 'Post from IP address that causes exception should be quietly approved.');
+		$this->assertEquals($event['data']['message'], 'Test', 'Data, including message text, should be let through unchanged.');
 	}
 	/**
 	 * Do unexpected exceptions get logged quietly, with the post being
