@@ -219,4 +219,49 @@ class main_test extends \phpbb_test_case
 		// Message should not be moderated
 		$this->assertFalse(isset($event['data']['force_approved_state']), 'Post from IP address that causes exception should be quietly approved.');
 	}
+	/**
+	 * Do unexpected exceptions get logged quietly, with the post being
+	 * marked as approved?
+	 */
+	public function test_event_listener_no_logging_normal_operation()
+	{
+		$phpbb_container = new \phpbb_mock_container_builder();
+		$mock_reader = new \gothick\geomoderate\tests\mock\geoip2_reader_mock('');
+		$phpbb_container->set('gothick.geomoderate.geoip2.reader', $mock_reader);
+
+		$user = $this->getMockBuilder('\phpbb\user')
+		->disableOriginalConstructor()
+		->getMock();
+
+		// Known GB IP address; no moderation, no exceptions thrown.
+		$user->ip = '81.174.144.111';
+		$user->data = array(
+				'user_id' => '345',
+				'username' => 'Matt',
+				'session_ip' => '81.174.144.111'
+		);
+
+		$log = $this->getMockBuilder('\phpbb\log\log')
+				->disableOriginalConstructor()
+				->setMethods(array('add'))
+				->getMock();
+
+		$log->expects($this->exactly(0))
+				->method('add');
+
+		$listener = new \gothick\geomoderate\event\main_listener(
+				$user,
+				$log,
+				$this->getMock('\phpbb\auth\auth'),
+				$phpbb_container,
+				new \gothick\geomoderate\tests\mock\country_rules_mock()
+		);
+
+		$data = array('data' => array('message' => 'Test'));
+		$event = new \phpbb\event\data($data);
+
+		$listener->check_submitted_post($event);
+		// Message should not be moderated
+		$this->assertFalse(isset($event['data']['force_approved_state']), 'Post from GP IP should be approved.');
+	}
 }
