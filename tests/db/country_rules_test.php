@@ -166,4 +166,49 @@ class country_rules_test extends \phpbb_session_test_case
 		$query_table = $this->getConnection()->createQueryTable($this->geomoderate_table, 'SELECT * FROM ' . $this->geomoderate_table . ' ORDER BY country_code');
 		$this->assertTablesEqual($expected, $query_table);
 	}
+
+	public function no_items_data ()
+	{
+		return array(
+				array(
+						// all should be set to 0
+						array('AD' => 0, 'AF' => 0, 'AG' => 0, 'MW' => 0, 'MX' => 0, 'MY' => 0),
+						dirname(__FILE__) . '/fixtures/country_rules_after_update_all_zero.xml'
+				),
+				array(
+						// All should be set to 1
+						array('AD' => 1, 'AF' => 1, 'AG' => 1, 'MW' => 1, 'MX' => 1, 'MY' => 1),
+						dirname(__FILE__) . '/fixtures/country_rules_after_update_all_one.xml'
+				),
+				array(
+						// No changes should be made
+						array(),
+						dirname(__FILE__) . '/fixtures/country_rules.xml'
+				)
+		);
+	}
+
+	/**
+	 * Because the first time I pressed "submit" on a rules admin page with no checkboxes checked,
+	 * I got a crash. This could happen with nothing sent to the bulk_update function, or with
+	 * all ones or all zeros, as it means we end up with a "WHERE country_code IN ()"...
+	 *
+	 * @dataProvider no_items_data
+	 */
+	public function test_page_rules_bulk_update_no_items ($moderate_array, $expected_file)
+	{
+		global $cache;
+		$country_rules = new \gothick\geomoderate\rules\country_rules(
+				$this->db,
+				$cache->get_driver(),
+				$this->geomoderate_table
+		);
+
+		$country_rules->bulk_update($moderate_array);
+		$query_table = $this->getConnection()->createQueryTable($this->geomoderate_table, 'SELECT * FROM ' . $this->geomoderate_table . ' ORDER BY country_code');
+
+		$expected = $this->createXMLDataSet($expected_file)->getTable($this->geomoderate_table);
+
+		$this->assertTablesEqual($expected, $query_table);
+	}
 }
