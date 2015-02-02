@@ -17,7 +17,7 @@ Temporary Items
 .apdisk
 
 # Composer
-vendor/
+/vendor/
 
 # MG API Key (temporarily hardcoded, but in a separate file
 # so I don't check it in to GitHub accidentally :D )
