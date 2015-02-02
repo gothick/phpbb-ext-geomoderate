@@ -246,6 +246,8 @@ class main_test extends \phpbb_test_case
 				->setMethods(array('add'))
 				->getMock();
 
+		// This is the main test here: nothing should be logged in normal
+		// operation.
 		$log->expects($this->exactly(0))
 				->method('add');
 
