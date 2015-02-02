@@ -7,6 +7,8 @@
  *
  */
 
+namespace gothick\geomoderate\tests\listener;
+
 class main_test extends \phpbb_test_case
 {
 
