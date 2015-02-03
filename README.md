@@ -1,6 +1,7 @@
 # phpbb-ext-geomoderate
 
 [![Build Status](https://travis-ci.org/gothick/phpbb-ext-geomoderate.svg?branch=master)](https://travis-ci.org/gothick/phpbb-ext-geomoderate)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/gothick/phpbb-ext-geomoderate/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/gothick/phpbb-ext-geomoderate/?branch=master)
 
 **Note**: This is beta software. Don't install it on a production board. Currently it's compatible with phpBB 3.1.x ("Ascraeus"), and it seems to work for me, but your mileage very definitely may vary.
 
