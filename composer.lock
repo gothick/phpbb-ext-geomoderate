@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "8878923624e67b321aac86fa81e75eb6",
+    "hash": "c951144401c60a53805cdfd5f0b9bfdf",
     "packages": [
         {
             "name": "composer/installers",
@@ -456,12 +456,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpbb/epv.git",
-                "reference": "a16b81cae6eb3ae2d60e33c87e4425fe962907bc"
+                "reference": "77b7200b834ff97d2f1e5c07259d8f95073dbaf0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpbb/epv/zipball/a16b81cae6eb3ae2d60e33c87e4425fe962907bc",
-                "reference": "a16b81cae6eb3ae2d60e33c87e4425fe962907bc",
+                "url": "https://api.github.com/repos/phpbb/epv/zipball/77b7200b834ff97d2f1e5c07259d8f95073dbaf0",
+                "reference": "77b7200b834ff97d2f1e5c07259d8f95073dbaf0",
                 "shasum": ""
             },
             "require": {
@@ -497,7 +497,7 @@
                 }
             ],
             "description": "A extension validator for phpBB extensions. Extensions are required to pass the validator when submitted to the extension database.",
-            "time": "2015-01-24 15:26:42"
+            "time": "2015-02-08 09:13:16"
         },
         {
             "name": "sensiolabs/ansi-to-html",
