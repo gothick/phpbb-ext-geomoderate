@@ -11,6 +11,10 @@ namespace gothick\geomoderate\tests\listener;
 
 class main_test extends \phpbb_test_case
 {
+	static protected function setup_extensions()
+	{
+		return array('gothick/akismet');
+	}
 
 	public function handle_data ()
 	{
