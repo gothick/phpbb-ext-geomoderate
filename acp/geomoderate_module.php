@@ -22,7 +22,7 @@ class geomoderate_module
 
 	var $u_action;
 
-	function main ($id, $mode)
+	public function main ($id, $mode)
 	{
 		global $phpbb_container, $user;
 

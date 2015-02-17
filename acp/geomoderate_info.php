@@ -11,7 +11,7 @@ namespace gothick\geomoderate\acp;
 
 class geomoderate_info
 {
-	function module()
+	public function module()
 	{
 		return array(
 			'filename'	=> '\gothick\geomoderate\acp\geomoderate_module',
