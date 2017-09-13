@@ -149,11 +149,6 @@ class main_listener implements EventSubscriberInterface
 				{
 					$log_message = 'GEOMODERATE_LOG_POST_DISAPPROVED';
 				}
-
-				// We need the ACP langauge pack for the moderation message.
-				// TODO: Do we really? Also, if we need it here, don't we also need
-				// it in the exception logging above?
-				$this->lang->add_lang('info_acp_geomoderate', 'gothick/geomoderate');
 				$this->log->add('mod',
 						$this->user->data['user_id'],
 						$this->user->data['session_ip'],
