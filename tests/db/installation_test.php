@@ -35,7 +35,7 @@ class installation_test extends \phpbb_database_test_case
 		parent::setUp();
 
 		$this->db = $this->new_dbal();
-		$this->db_tools = new \phpbb\db\tools($this->db);
+		$this->db_tools = new \phpbb\db\tools\tools($this->db);
 		$this->geomoderate_table = $table_prefix . 'gothick_geomoderate';
 	}
 
