@@ -54,7 +54,8 @@ class admin_controller
 			\phpbb\user $user,
 			\phpbb\log\log_interface $log,
 			\phpbb\pagination $pagination,
-			\gothick\geomoderate\rules\country_rules $country_rules
+			\gothick\geomoderate\rules\country_rules $country_rules,
+			\phpbb\language\language $lang
 		)
 	{
 		$this->request = $request;
@@ -63,6 +64,7 @@ class admin_controller
 		$this->log = $log;
 		$this->pagination = $pagination;
 		$this->country_rules = $country_rules;
+		$this->lang = $language;
 	}
 
 	/**
@@ -86,7 +88,7 @@ class admin_controller
 					'GEOMODERATE_LOG_SETTING_CHANGED');
 
 			trigger_error(
-					$this->user->lang('ACP_GEOMODERATE_SETTING_SAVED') .
+					$this->lang('ACP_GEOMODERATE_SETTING_SAVED') .
 							adm_back_link($this->u_action));
 		}
 
@@ -102,7 +104,7 @@ class admin_controller
 		{
 			$this->template->assign_block_vars('geomoderate', array(
 					'COUNTRY_CODE' => $country_code,
-					'COUNTRY_NAME' => $this->user->lang(array('ACP_GEOMODERATE_COUNTRIES', $country_code)),
+					'COUNTRY_NAME' => $this->lang(array('ACP_GEOMODERATE_COUNTRIES', $country_code)),
 					'MODERATE' => $moderate
 			));
 		}
