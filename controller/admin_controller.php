@@ -36,6 +36,9 @@ class admin_controller
 	/** @var string Custom form action */
 	protected $u_action;
 
+	/** @var \phpbb\language\language */
+	protected $lang;
+
 	const FORM_KEY = 'gothick/geomoderate';
 
 	/**
@@ -64,7 +67,7 @@ class admin_controller
 		$this->log = $log;
 		$this->pagination = $pagination;
 		$this->country_rules = $country_rules;
-		$this->lang = $language;
+		$this->lang = $lang;
 	}
 
 	/**
@@ -88,7 +91,7 @@ class admin_controller
 					'GEOMODERATE_LOG_SETTING_CHANGED');
 
 			trigger_error(
-					$this->lang('ACP_GEOMODERATE_SETTING_SAVED') .
+					$this->lang->lang('ACP_GEOMODERATE_SETTING_SAVED') .
 							adm_back_link($this->u_action));
 		}
 
@@ -104,7 +107,7 @@ class admin_controller
 		{
 			$this->template->assign_block_vars('geomoderate', array(
 					'COUNTRY_CODE' => $country_code,
-					'COUNTRY_NAME' => $this->lang(array('ACP_GEOMODERATE_COUNTRIES', $country_code)),
+					'COUNTRY_NAME' => $this->lang->lang(array('ACP_GEOMODERATE_COUNTRIES', $country_code)),
 					'MODERATE' => $moderate
 			));
 		}
