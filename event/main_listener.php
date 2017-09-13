@@ -32,20 +32,23 @@ class main_listener implements EventSubscriberInterface
 		);
 	}
 
-	/* @var \phpbb\user */
+	/** @var \phpbb\user */
 	protected $user;
 
-	/* @var \phpbb\log\log_interface */
+	/** @var \phpbb\log\log_interface */
 	protected $log;
 
-	/* @var \phpbb\auth\auth */
+	/** @var \phpbb\auth\auth */
 	protected $auth;
 
-	/* @var ContainerInterface */
+	/** @var ContainerInterface */
 	protected $phpbb_container;
 
-	/* @var \gothick\geomoderate\rules\country_rules */
+	/** @var \gothick\geomoderate\rules\country_rules */
 	protected $country_rules;
+
+	/** @var \phpbb\language\language */
+	protected $lang;
 
 	/**
 	 * Constructor
@@ -65,7 +68,8 @@ class main_listener implements EventSubscriberInterface
 			\phpbb\log\log_interface $log,
 			\phpbb\auth\auth $auth,
 			ContainerInterface $phpbb_container,
-			\gothick\geomoderate\rules\country_rules $country_rules
+			\gothick\geomoderate\rules\country_rules $country_rules,
+			\phpbb\language\language $lang
 		)
 	{
 		$this->user = $user;
@@ -73,6 +77,7 @@ class main_listener implements EventSubscriberInterface
 		$this->auth = $auth;
 		$this->phpbb_container = $phpbb_container;
 		$this->country_rules = $country_rules;
+		$this->lang = $lang;
 	}
 
 	/**
@@ -86,7 +91,7 @@ class main_listener implements EventSubscriberInterface
 	 * If anything goes wrong, assume we should be approving the post, i.e.
 	 * fail safe on exceptions, etc.
 	 *
-	 * @param unknown $event
+	 * @param \phpbb\event\data $event
 	 */
 	public function check_submitted_post ($event)
 	{
@@ -146,7 +151,9 @@ class main_listener implements EventSubscriberInterface
 				}
 
 				// We need the ACP langauge pack for the moderation message.
-				$this->user->add_lang_ext('gothick/geomoderate', 'info_acp_geomoderate');
+				// TODO: Do we really? Also, if we need it here, don't we also need
+				// it in the exception logging above?
+				$this->lang->add_lang('info_acp_geomoderate', 'gothick/geomoderate');
 				$this->log->add('mod',
 						$this->user->data['user_id'],
 						$this->user->data['session_ip'],
