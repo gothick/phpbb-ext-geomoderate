@@ -10,8 +10,6 @@ matrix:
       env: DB=mysqli
     - php: 5.6
       env: DB=mariadb
-      addons:
-        mariadb: '10.0'
     - php: 5.6
       env: DB=postgres
     - php: 5.6
@@ -25,6 +23,10 @@ matrix:
   allow_failures:
     - php: hhvm
   fast_finish: true
+
+addons:
+  mariadb: '10.0'
+
 
 env:
   global:
