@@ -11,6 +11,7 @@ services:
             - '@auth'
             - '@service_container'
             - '@gothick.geomoderate.country_rules'
+            - '@language'
         tags:
             - { name: event.listener }
 
