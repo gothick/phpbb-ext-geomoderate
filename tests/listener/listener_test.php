@@ -11,6 +11,20 @@ namespace gothick\geomoderate\tests\listener;
 
 class main_test extends \phpbb_test_case
 {
+	/** @var \phpbb\language\language */
+	protected $language;
+
+	public function setUp()
+	{
+		parent::setUp();
+
+		// TODO: We could share more of these objects, I think; I didn't put stuff
+		// in setUp when I originally wrote these tests.
+		$this->language = $this->getMockBuilder('\phpbb\language\language')
+			->disableOriginalConstructor()
+			->getMock();
+
+	}
 	static protected function setup_extensions()
 	{
 		return array('gothick/akismet');
@@ -87,10 +101,11 @@ class main_test extends \phpbb_test_case
 
 		$listener = new \gothick\geomoderate\event\main_listener(
 				$user,
-				new \phpbb\log\null(),
+				new \phpbb\log\dummy(),
 				$this->getMock('\phpbb\auth\auth'),
 				$phpbb_container,
-				new \gothick\geomoderate\tests\mock\country_rules_mock()
+				new \gothick\geomoderate\tests\mock\country_rules_mock(),
+				$this->language
 		);
 
 		$data = array(
@@ -159,7 +174,8 @@ class main_test extends \phpbb_test_case
 				$log,
 				$this->getMock('\phpbb\auth\auth'),
 				$phpbb_container,
-				new \gothick\geomoderate\tests\mock\country_rules_mock()
+				new \gothick\geomoderate\tests\mock\country_rules_mock(),
+				$this->language
 		);
 
 		$data = array('data' => array('message' => 'Test'));
@@ -215,7 +231,8 @@ class main_test extends \phpbb_test_case
 				$log,
 				$this->getMock('\phpbb\auth\auth'),
 				$phpbb_container,
-				new \gothick\geomoderate\tests\mock\country_rules_mock()
+				new \gothick\geomoderate\tests\mock\country_rules_mock(),
+				$this->language
 		);
 
 		$data = array('data' => array('message' => 'Test'));
@@ -237,8 +254,8 @@ class main_test extends \phpbb_test_case
 		$phpbb_container->set('gothick.geomoderate.geoip2.reader', $mock_reader);
 
 		$user = $this->getMockBuilder('\phpbb\user')
-		->disableOriginalConstructor()
-		->getMock();
+			->disableOriginalConstructor()
+			->getMock();
 
 		// Known GB IP address; no moderation, no exceptions thrown.
 		$user->ip = '81.174.144.111';
@@ -263,7 +280,8 @@ class main_test extends \phpbb_test_case
 				$log,
 				$this->getMock('\phpbb\auth\auth'),
 				$phpbb_container,
-				new \gothick\geomoderate\tests\mock\country_rules_mock()
+				new \gothick\geomoderate\tests\mock\country_rules_mock(),
+				$this->language
 		);
 
 		$data = array('data' => array('message' => 'Test'));

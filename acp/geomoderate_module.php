@@ -24,19 +24,19 @@ class geomoderate_module
 
 	public function main ($id, $mode)
 	{
-		global $phpbb_container, $user;
+		global $phpbb_container;
+		/** @var \phpbb\language\language $lang */
+		$lang = $phpbb_container->get('language');
 
-		// Add our ACP language file.
-		$user->add_lang_ext('gothick/geomoderate', 'geomoderate_acp');
-		// And all our country names
-		$user->add_lang_ext('gothick/geomoderate', 'geomoderate_acp_countries');
+		// We want our standard language elements plus the big list of countries.
+		$lang->add_lang(array('geomoderate_acp', 'geomoderate_acp_countries'), 'gothick/geomoderate');
 
 		/* @var $admin_controller \gothick\geomoderate\controller\admin_controller */
 		$admin_controller = $phpbb_container->get('gothick.geomoderate.admin.controller');
 		$admin_controller->set_action($this->u_action);
 
 		$this->tpl_name = 'geomoderate_body';
-		$this->page_title = $user->lang('ACP_GEOMODERATE_TITLE');
+		$this->page_title = $lang->lang('ACP_GEOMODERATE_TITLE');
 		$admin_controller->display_settings();
 	}
 }

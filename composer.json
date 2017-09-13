@@ -3,8 +3,8 @@
    "type": "phpbb-extension",
    "description": "GeoModerate moderates posts from chosen countries",
    "homepage": "https://github.com/gothick/phpbb-ext-geomoderate",
-   "version": "0.1.1",
-   "time": "2015-01-29",
+   "version": "0.2.0",
+   "time": "2017-09-13",
    "license": "GPL-2.0",
    "authors": [{
       "name": "Matt Gibson",
@@ -13,7 +13,7 @@
       "role": "Lead Developer"
    }],
    "require": {
-      "php": ">=5.3.3",
+      "php": ">=5.6",
       "composer/installers": "~1.0",
       "geoip2/geoip2": "dev-master"
    },
@@ -23,7 +23,7 @@
    "extra": {
       "display-name": "GeoModerate",
       "soft-require" : {
-         "phpbb/phpbb": ">=3.1.0-RC2,<3.2.*@dev"
+         "phpbb/phpbb": "~3.2"
       }
    }
 }

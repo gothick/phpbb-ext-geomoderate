@@ -6,32 +6,34 @@ services:
     gothick.geomoderate.listener:
         class: gothick\geomoderate\event\main_listener
         arguments:
-            - @user
-            - @log
-            - @auth
-            - @service_container
-            - @gothick.geomoderate.country_rules
+            - '@user'
+            - '@log'
+            - '@auth'
+            - '@service_container'
+            - '@gothick.geomoderate.country_rules'
+            - '@language'
         tags:
             - { name: event.listener }
 
     gothick.geomoderate.admin.controller:
         class: gothick\geomoderate\controller\admin_controller
         arguments:
-            - @request
-            - @template
-            - @user
-            - @log
-            - @pagination
-            - @gothick.geomoderate.country_rules
+            - '@request'
+            - '@template'
+            - '@user'
+            - '@log'
+            - '@pagination'
+            - '@gothick.geomoderate.country_rules'
+            - '@language'
 
     gothick.geomoderate.geoip2.reader:
         class: GeoIp2\Database\Reader
         arguments:
-            - %gothick.geomoderate.paths.geolite_db%
+            - '%gothick.geomoderate.paths.geolite_db%'
 
     gothick.geomoderate.country_rules:
         class: gothick\geomoderate\rules\country_rules
         arguments:
-            - @dbal.conn
-            - @cache.driver
-            - %gothick.geomoderate.tables.geomoderate%
+            - '@dbal.conn'
+            - '@cache.driver'
+            - '%gothick.geomoderate.tables.geomoderate%'

@@ -16,7 +16,6 @@ class geomoderate_info
 		return array(
 			'filename'	=> '\gothick\geomoderate\acp\geomoderate_module',
 			'title'		=> 'ACP_GEOMODERATE_TITLE',
-			'version'	=> '1.0.1',
 			'modes'		=> array(
 				'settings'	=> array('title' => 'ACP_GEOMODERATE_SETTINGS',
 						'auth' => 'ext_gothick/geomoderate && acl_a_board',
