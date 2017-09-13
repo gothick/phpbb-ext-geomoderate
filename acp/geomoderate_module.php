@@ -24,12 +24,16 @@ class geomoderate_module
 
 	public function main ($id, $mode)
 	{
-		global $phpbb_container, $user;
+		// The example extension documentation seems to suggest using
+		// these as globals rather then fetching them out of the container.
+		// Not sure why.
+		global $phpbb_container, $user, $language;
 
-		// Add our ACP language file.
-		$user->add_lang_ext('gothick/geomoderate', 'geomoderate_acp');
+		// TODO: Are we using this new Language object correctly?
+		// Add ACP language strings
+		$user->add_lang('geomoderate_acp', 'gothick/geomoderate');
 		// And all our country names
-		$user->add_lang_ext('gothick/geomoderate', 'geomoderate_acp_countries');
+		$user->add_lang('geomoderate_acp_countries', 'gothick/geomoderate');
 
 		/* @var $admin_controller \gothick\geomoderate\controller\admin_controller */
 		$admin_controller = $phpbb_container->get('gothick.geomoderate.admin.controller');
