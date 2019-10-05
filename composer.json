@@ -3,7 +3,7 @@
    "type": "phpbb-extension",
    "description": "GeoModerate moderates posts from chosen countries",
    "homepage": "https://github.com/gothick/phpbb-ext-geomoderate",
-   "version": "0.2.0",
+   "version": "0.2.1",
    "time": "2017-09-13",
    "license": "GPL-2.0",
    "authors": [{
