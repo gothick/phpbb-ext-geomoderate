@@ -102,7 +102,7 @@ class main_test extends \phpbb_test_case
 		$listener = new \gothick\geomoderate\event\main_listener(
 				$user,
 				new \phpbb\log\dummy(),
-				$this->getMock('\phpbb\auth\auth'),
+				$this->getMockBuilder('\phpbb\auth\auth')->getMock(),
 				$phpbb_container,
 				new \gothick\geomoderate\tests\mock\country_rules_mock(),
 				$this->language
@@ -172,7 +172,7 @@ class main_test extends \phpbb_test_case
 		$listener = new \gothick\geomoderate\event\main_listener(
 				$user,
 				$log,
-				$this->getMock('\phpbb\auth\auth'),
+				$this->getMockBuilder('\phpbb\auth\auth')->getMock(),
 				$phpbb_container,
 				new \gothick\geomoderate\tests\mock\country_rules_mock(),
 				$this->language
@@ -229,7 +229,7 @@ class main_test extends \phpbb_test_case
 		$listener = new \gothick\geomoderate\event\main_listener(
 				$user,
 				$log,
-				$this->getMock('\phpbb\auth\auth'),
+				$this->getMockBuilder('\phpbb\auth\auth')->getMock(),
 				$phpbb_container,
 				new \gothick\geomoderate\tests\mock\country_rules_mock(),
 				$this->language
@@ -278,7 +278,7 @@ class main_test extends \phpbb_test_case
 		$listener = new \gothick\geomoderate\event\main_listener(
 				$user,
 				$log,
-				$this->getMock('\phpbb\auth\auth'),
+				$this->getMockBuilder('\phpbb\auth\auth')->getMock(),
 				$phpbb_container,
 				new \gothick\geomoderate\tests\mock\country_rules_mock(),
 				$this->language
