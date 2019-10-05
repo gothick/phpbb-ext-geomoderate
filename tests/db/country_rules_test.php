@@ -34,7 +34,7 @@ class country_rules_test extends \phpbb_session_test_case
 		return array('gothick/geomoderate');
 	}
 
-	public function setUp()
+	public function setUp(): void
 	{
 		global $table_prefix;
 
@@ -59,7 +59,7 @@ class country_rules_test extends \phpbb_session_test_case
 		);
 	}
 
-	public function tearDown()
+	public function tearDown(): void
 	{
 		parent::tearDown();
 		// Set cache back to what it was before the test changed it

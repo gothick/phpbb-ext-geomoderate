@@ -28,7 +28,7 @@ class installation_test extends \phpbb_database_test_case
 		return array('gothick/geomoderate');
 	}
 
-	public function setUp()
+	public function setUp(): void
 	{
 		global $table_prefix;
 
