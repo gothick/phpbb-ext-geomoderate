@@ -19,7 +19,7 @@ class country_rules_test extends \phpbb_session_test_case
 	protected $db;
 
 	/**
-	 * @var \phpbb\db\tools
+	 * @var \phpbb\db\tools\tools_interface
 	 */
 	protected $db_tools;
 
@@ -41,7 +41,8 @@ class country_rules_test extends \phpbb_session_test_case
 		parent::setUp();
 
 		$this->db = $this->new_dbal();
-		$this->db_tools = new \phpbb\db\tools($this->db);
+		$db_tools_factory = new \phpbb\db\tools\factory();
+		$this->db_tools = $db_tools_factory->get($this->db);
 		$this->geomoderate_table = $table_prefix . 'gothick_geomoderate';
 
 		$this->session = $this->session_factory->get_session($this->db);
