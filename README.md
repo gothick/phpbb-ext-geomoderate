@@ -4,7 +4,7 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/gothick/phpbb-ext-geomoderate/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/gothick/phpbb-ext-geomoderate/?branch=master)
 
 **Note**: This is not official phpBB software. Recent releases should be compatible with
-phpBB 3.2.x (tested with 3.2.1+). It seems to work for me, but your mileage may vary, and
+phpBB 3.3.x (tested with 3.3.1). It seems to work for me, but your mileage may vary, and
 I give no guarantees!
 
 A phpBB Extension that moderates all posts from certain countries, based on the Maxmind 
